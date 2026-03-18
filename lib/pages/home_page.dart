@@ -18,6 +18,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final greeting = GreetingService.forCurrentTime(DateTime.now());
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return MobileShell(
       child: SingleChildScrollView(
@@ -31,14 +32,18 @@ class HomePage extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.82),
+                    color: isDark
+                        ? AppColors.darkSurfaceSoft.withValues(alpha: 0.9)
+                        : Colors.white.withValues(alpha: 0.82),
                     borderRadius: BorderRadius.circular(18),
-                    border: Border.all(color: AppColors.border),
+                    border: Border.all(
+                      color: isDark ? AppColors.darkBorder : AppColors.border,
+                    ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Tempat kecil dari Syarif',
                     style: TextStyle(
-                      color: AppColors.rose,
+                      color: isDark ? AppColors.darkRose : AppColors.rose,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -58,7 +63,8 @@ class HomePage extends StatelessWidget {
             Text(
               greeting,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: AppColors.mutedText,
+                    color:
+                        isDark ? AppColors.darkMutedText : AppColors.mutedText,
                     height: 1.45,
                   ),
             ),
@@ -68,18 +74,25 @@ class HomePage extends StatelessWidget {
               padding: const EdgeInsets.all(22),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.white,
-                    AppColors.blush.withValues(alpha: 0.92),
-                  ],
+                  colors: isDark
+                      ? [
+                          AppColors.darkSurface,
+                          AppColors.darkSurfaceSoft,
+                        ]
+                      : [
+                          Colors.white,
+                          AppColors.blush.withValues(alpha: 0.92),
+                        ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(28),
-                border: Border.all(color: AppColors.border),
-                boxShadow: const [
+                border: Border.all(
+                  color: isDark ? AppColors.darkBorder : AppColors.border,
+                ),
+                boxShadow: [
                   BoxShadow(
-                    color: AppColors.shadow,
+                    color: isDark ? AppColors.darkShadow : AppColors.shadow,
                     blurRadius: 22,
                     offset: Offset(0, 12),
                   ),
@@ -94,13 +107,15 @@ class HomePage extends StatelessWidget {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.8),
+                      color: isDark
+                          ? AppColors.darkSurfaceSoft.withValues(alpha: 0.9)
+                          : Colors.white.withValues(alpha: 0.8),
                       borderRadius: BorderRadius.circular(18),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Ruang kecil untuk Misra',
                       style: TextStyle(
-                        color: AppColors.rose,
+                        color: isDark ? AppColors.darkRose : AppColors.rose,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -117,7 +132,9 @@ class HomePage extends StatelessWidget {
                   Text(
                     'Kalau mau, mulai ngobrol sama Syra, lihat hitungan kebersamaan, atau buka momen sederhana kalian pelan-pelan yaa.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.mutedText,
+                          color: isDark
+                              ? AppColors.darkMutedText
+                              : AppColors.mutedText,
                           height: 1.5,
                         ),
                   ),
@@ -128,7 +145,8 @@ class HomePage extends StatelessWidget {
             Text(
               'Pilih yang kamu butuhin dulu yaa, sisanya tetap ada di sini buat dibuka kapan aja.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.mutedText,
+                    color:
+                        isDark ? AppColors.darkMutedText : AppColors.mutedText,
                     height: 1.45,
                   ),
             ),
@@ -193,6 +211,8 @@ class _MiniHomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -207,10 +227,15 @@ class _MiniHomeCard extends StatelessWidget {
                 width: 46,
                 height: 46,
                 decoration: BoxDecoration(
-                  color: AppColors.blush,
+                  color: isDark
+                      ? AppColors.darkSurfaceSoft
+                      : AppColors.blush,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Icon(icon, color: AppColors.rose),
+                child: Icon(
+                  icon,
+                  color: isDark ? AppColors.darkRose : AppColors.rose,
+                ),
               ),
               const SizedBox(height: 14),
               Text(
@@ -223,7 +248,9 @@ class _MiniHomeCard extends StatelessWidget {
               Text(
                 subtitle,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppColors.mutedText,
+                      color: isDark
+                          ? AppColors.darkMutedText
+                          : AppColors.mutedText,
                       height: 1.4,
                     ),
               ),

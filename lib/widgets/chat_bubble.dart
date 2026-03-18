@@ -53,37 +53,44 @@ class ChatBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isUser = message.isUser;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final bubble = Container(
       constraints: const BoxConstraints(maxWidth: 290),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
       decoration: BoxDecoration(
-        color: isUser ? AppColors.rose : Colors.white,
-        borderRadius: BorderRadius.circular(22).copyWith(
-          bottomRight: Radius.circular(isUser ? 8 : 22),
-          bottomLeft: Radius.circular(isUser ? 22 : 8),
+        color: isUser
+            ? (isDark ? AppColors.darkRose : AppColors.rose)
+            : (isDark ? AppColors.darkSurface : const Color(0xFFFFFDFD)),
+        borderRadius: BorderRadius.circular(20).copyWith(
+          bottomRight: Radius.circular(isUser ? 6 : 20),
+          bottomLeft: Radius.circular(isUser ? 20 : 6),
         ),
         border: Border.all(
-          color: isUser ? AppColors.rose : AppColors.border,
+          color: isUser
+              ? (isDark ? AppColors.darkRose : AppColors.rose)
+              : (isDark ? AppColors.darkBorder : const Color(0xFFF0D9DF)),
         ),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 16,
-            offset: Offset(0, 8),
+            color: isDark ? AppColors.darkShadow : AppColors.shadow,
+            blurRadius: 12,
+            offset: Offset(0, 6),
           ),
         ],
       ),
       child: Text(
         message.text,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: isUser ? Colors.white : AppColors.text,
+              color: isUser
+                  ? Colors.white
+                  : (isDark ? AppColors.darkText : AppColors.text),
               height: 1.45,
             ),
       ),
     );
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Row(
         mainAxisAlignment:
             isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -97,17 +104,17 @@ class ChatBubble extends StatelessWidget {
           if (isUser && showAvatar) ...[
             const SizedBox(width: 8),
             Container(
-              width: 34,
-              height: 34,
-              decoration: const BoxDecoration(
-                color: AppColors.blush,
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: isDark ? AppColors.darkSurfaceSoft : AppColors.blush,
                 shape: BoxShape.circle,
               ),
               alignment: Alignment.center,
-              child: const Icon(
+              child: Icon(
                 Icons.favorite_rounded,
-                size: 18,
-                color: AppColors.rose,
+                size: 16,
+                color: isDark ? AppColors.darkRose : AppColors.rose,
               ),
             ),
           ],

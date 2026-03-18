@@ -40,6 +40,7 @@ class _LoveCounterPageState extends State<LoveCounterPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final days = _duration.inDays;
     final hours = _duration.inHours.remainder(24);
     final minutes = _duration.inMinutes.remainder(60);
@@ -75,18 +76,25 @@ class _LoveCounterPageState extends State<LoveCounterPage> {
               padding: const EdgeInsets.fromLTRB(22, 22, 22, 22),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.white,
-                    AppColors.blush.withValues(alpha: 0.9),
-                  ],
+                  colors: isDark
+                      ? [
+                          AppColors.darkSurface,
+                          AppColors.darkSurfaceSoft,
+                        ]
+                      : [
+                          Colors.white,
+                          AppColors.blush.withValues(alpha: 0.9),
+                        ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(28),
-                border: Border.all(color: AppColors.border),
-                boxShadow: const [
+                border: Border.all(
+                  color: isDark ? AppColors.darkBorder : AppColors.border,
+                ),
+                boxShadow: [
                   BoxShadow(
-                    color: AppColors.shadow,
+                    color: isDark ? AppColors.darkShadow : AppColors.shadow,
                     blurRadius: 22,
                     offset: Offset(0, 12),
                   ),
@@ -101,13 +109,15 @@ class _LoveCounterPageState extends State<LoveCounterPage> {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.82),
+                      color: isDark
+                          ? AppColors.darkSurfaceSoft.withValues(alpha: 0.9)
+                          : Colors.white.withValues(alpha: 0.82),
                       borderRadius: BorderRadius.circular(18),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Sejak 1 November 2024',
                       style: TextStyle(
-                        color: AppColors.rose,
+                        color: isDark ? AppColors.darkRose : AppColors.rose,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -124,7 +134,9 @@ class _LoveCounterPageState extends State<LoveCounterPage> {
                   Text(
                     'Waktu kebersamaan yang terus jalan, pelan, lembut, dan tetap terasa.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.mutedText,
+                          color: isDark
+                              ? AppColors.darkMutedText
+                              : AppColors.mutedText,
                           height: 1.5,
                         ),
                   ),
@@ -135,7 +147,8 @@ class _LoveCounterPageState extends State<LoveCounterPage> {
             Text(
               'Detail waktunya tetap berjalan sampai detik ini.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: AppColors.mutedText,
+                    color:
+                        isDark ? AppColors.darkMutedText : AppColors.mutedText,
                     height: 1.45,
                   ),
             ),
@@ -174,14 +187,21 @@ class _CounterBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            AppColors.blush,
-            AppColors.softPink.withValues(alpha: 0.92),
-          ],
+          colors: isDark
+              ? [
+                  AppColors.darkSurfaceSoft,
+                  AppColors.darkBorder,
+                ]
+              : [
+                  AppColors.blush,
+                  AppColors.softPink.withValues(alpha: 0.92),
+                ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -199,7 +219,8 @@ class _CounterBox extends StatelessWidget {
           Text(
             label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.mutedText,
+                  color:
+                      isDark ? AppColors.darkMutedText : AppColors.mutedText,
                 ),
           ),
         ],

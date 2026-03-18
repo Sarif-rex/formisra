@@ -288,6 +288,8 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return MobileShell(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
@@ -296,12 +298,16 @@ class _ChatPageState extends State<ChatPage> {
             Container(
               padding: const EdgeInsets.fromLTRB(6, 2, 2, 2),
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.9),
+                color: isDark
+                    ? AppColors.darkSurface.withValues(alpha: 0.95)
+                    : Colors.white.withValues(alpha: 0.9),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.border),
-                boxShadow: const [
+                border: Border.all(
+                  color: isDark ? AppColors.darkBorder : AppColors.border,
+                ),
+                boxShadow: [
                   BoxShadow(
-                    color: AppColors.shadow,
+                    color: isDark ? AppColors.darkShadow : AppColors.shadow,
                     blurRadius: 18,
                     offset: Offset(0, 8),
                   ),
@@ -367,7 +373,8 @@ class _ChatPageState extends State<ChatPage> {
                       child: Text(
                         _errorMessage!,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppColors.text,
+                              color:
+                                  isDark ? AppColors.darkText : AppColors.text,
                             ),
                       ),
                     ),
@@ -389,18 +396,25 @@ class _ChatPageState extends State<ChatPage> {
                 padding: const EdgeInsets.fromLTRB(12, 14, 12, 8),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      Colors.white.withValues(alpha: 0.9),
-                      AppColors.cream.withValues(alpha: 0.88),
-                    ],
+                    colors: isDark
+                        ? [
+                            AppColors.darkSurface,
+                            AppColors.darkSurfaceSoft,
+                          ]
+                        : [
+                            Colors.white.withValues(alpha: 0.9),
+                            AppColors.cream.withValues(alpha: 0.88),
+                          ],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   ),
                   borderRadius: BorderRadius.circular(28),
-                  border: Border.all(color: AppColors.border),
-                  boxShadow: const [
+                  border: Border.all(
+                    color: isDark ? AppColors.darkBorder : AppColors.border,
+                  ),
+                  boxShadow: [
                     BoxShadow(
-                      color: AppColors.shadow,
+                      color: isDark ? AppColors.darkShadow : AppColors.shadow,
                       blurRadius: 20,
                       offset: Offset(0, 10),
                     ),
@@ -417,7 +431,11 @@ class _ChatPageState extends State<ChatPage> {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge
-                                  ?.copyWith(color: AppColors.mutedText),
+                                  ?.copyWith(
+                                    color: isDark
+                                        ? AppColors.darkMutedText
+                                        : AppColors.mutedText,
+                                  ),
                             ),
                           )
                         : ListView(
@@ -435,9 +453,16 @@ class _ChatPageState extends State<ChatPage> {
                                   vertical: 10,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.8),
+                                  color: isDark
+                                      ? AppColors.darkSurfaceSoft
+                                          .withValues(alpha: 0.9)
+                                      : Colors.white.withValues(alpha: 0.8),
                                   borderRadius: BorderRadius.circular(18),
-                                  border: Border.all(color: AppColors.border),
+                                  border: Border.all(
+                                    color: isDark
+                                        ? AppColors.darkBorder
+                                        : AppColors.border,
+                                  ),
                                 ),
                                 child: Text(
                                   'Syra ada di sini buat nemenin Misra. Syra dibuat Syarif khusus untuk kamu.',
@@ -446,7 +471,9 @@ class _ChatPageState extends State<ChatPage> {
                                       .textTheme
                                       .bodySmall
                                       ?.copyWith(
-                                        color: AppColors.mutedText,
+                                        color: isDark
+                                            ? AppColors.darkMutedText
+                                            : AppColors.mutedText,
                                         height: 1.45,
                                       ),
                                 ),
@@ -478,18 +505,25 @@ class _ChatPageState extends State<ChatPage> {
               padding: const EdgeInsets.fromLTRB(12, 8, 10, 8),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.white,
-                    AppColors.cream.withValues(alpha: 0.96),
-                  ],
+                  colors: isDark
+                      ? [
+                          AppColors.darkSurface,
+                          AppColors.darkSurfaceSoft,
+                        ]
+                      : [
+                          Colors.white,
+                          AppColors.cream.withValues(alpha: 0.96),
+                        ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
                 borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: AppColors.border),
-                boxShadow: const [
+                border: Border.all(
+                  color: isDark ? AppColors.darkBorder : AppColors.border,
+                ),
+                boxShadow: [
                   BoxShadow(
-                    color: AppColors.shadow,
+                    color: isDark ? AppColors.darkShadow : AppColors.shadow,
                     blurRadius: 14,
                     offset: Offset(0, 6),
                   ),
@@ -553,7 +587,8 @@ class _ChatPageState extends State<ChatPage> {
             Text(
               'Cerita pelan-pelan aja. Syra akan jawab dengan lembut.',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.mutedText,
+                    color:
+                        isDark ? AppColors.darkMutedText : AppColors.mutedText,
                     fontSize: 11.5,
                   ),
             ),

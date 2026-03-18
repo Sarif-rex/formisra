@@ -46,6 +46,8 @@ class _WelcomePageState extends State<WelcomePage>
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return MobileShell(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(18, 20, 18, 20),
@@ -66,18 +68,25 @@ class _WelcomePageState extends State<WelcomePage>
                   padding: const EdgeInsets.fromLTRB(22, 24, 22, 22),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [
-                        Colors.white.withValues(alpha: 0.96),
-                        AppColors.blush.withValues(alpha: 0.9),
-                      ],
+                      colors: isDark
+                          ? [
+                              AppColors.darkSurface,
+                              AppColors.darkSurfaceSoft,
+                            ]
+                          : [
+                              Colors.white.withValues(alpha: 0.96),
+                              AppColors.blush.withValues(alpha: 0.9),
+                            ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(30),
-                    border: Border.all(color: AppColors.border),
-                    boxShadow: const [
+                    border: Border.all(
+                      color: isDark ? AppColors.darkBorder : AppColors.border,
+                    ),
+                    boxShadow: [
                       BoxShadow(
-                        color: AppColors.shadow,
+                        color: isDark ? AppColors.darkShadow : AppColors.shadow,
                         blurRadius: 24,
                         offset: Offset(0, 12),
                       ),
@@ -90,13 +99,19 @@ class _WelcomePageState extends State<WelcomePage>
                         width: 76,
                         height: 76,
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.9),
+                          color: isDark
+                              ? AppColors.darkSurfaceSoft
+                              : Colors.white.withValues(alpha: 0.9),
                           borderRadius: BorderRadius.circular(24),
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(
+                            color: isDark
+                                ? AppColors.darkBorder
+                                : AppColors.border,
+                          ),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.favorite_rounded,
-                          color: AppColors.rose,
+                          color: isDark ? AppColors.darkRose : AppColors.rose,
                           size: 34,
                         ),
                       ),
@@ -107,13 +122,16 @@ class _WelcomePageState extends State<WelcomePage>
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.82),
+                          color: isDark
+                              ? AppColors.darkSurfaceSoft.withValues(alpha: 0.9)
+                              : Colors.white.withValues(alpha: 0.82),
                           borderRadius: BorderRadius.circular(18),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Tempat kecil dari Syarif',
                           style: TextStyle(
-                            color: AppColors.rose,
+                            color:
+                                isDark ? AppColors.darkRose : AppColors.rose,
                             fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -131,7 +149,9 @@ class _WelcomePageState extends State<WelcomePage>
                       Text(
                         'Web kecil ini aku bikin supaya kesayangan Syarif tetap punya tempat yang hangat buat pulang, meski aku nggak selalu bisa hadir di setiap waktu.',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: AppColors.text,
+                              color: isDark
+                                  ? AppColors.darkText
+                                  : AppColors.text,
                               height: 1.6,
                             ),
                       ),
@@ -142,7 +162,9 @@ class _WelcomePageState extends State<WelcomePage>
                           'Di sini ada Syra, hitungan kebersamaan, dan momen sederhana yang bisa dibuka kapan pun kamu butuh.',
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.mutedText,
+                                    color: isDark
+                                        ? AppColors.darkMutedText
+                                        : AppColors.mutedText,
                                     height: 1.5,
                                   ),
                         ),
@@ -154,7 +176,9 @@ class _WelcomePageState extends State<WelcomePage>
                 Text(
                   'Dibuat ringan, hangat, dan dekat buat kesayangan Syarif.',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.mutedText,
+                        color: isDark
+                            ? AppColors.darkMutedText
+                            : AppColors.mutedText,
                         height: 1.45,
                       ),
                 ),

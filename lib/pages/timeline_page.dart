@@ -14,6 +14,7 @@ class TimelinePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return MobileShell(
       child: ListView.separated(
         padding: const EdgeInsets.fromLTRB(18, 14, 18, 24),
@@ -47,18 +48,25 @@ class TimelinePage extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(22, 22, 22, 22),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.white,
-                    AppColors.blush.withValues(alpha: 0.9),
-                  ],
+                  colors: isDark
+                      ? [
+                          AppColors.darkSurface,
+                          AppColors.darkSurfaceSoft,
+                        ]
+                      : [
+                          Colors.white,
+                          AppColors.blush.withValues(alpha: 0.9),
+                        ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(28),
-                border: Border.all(color: AppColors.border),
-                boxShadow: const [
+                border: Border.all(
+                  color: isDark ? AppColors.darkBorder : AppColors.border,
+                ),
+                boxShadow: [
                   BoxShadow(
-                    color: AppColors.shadow,
+                    color: isDark ? AppColors.darkShadow : AppColors.shadow,
                     blurRadius: 22,
                     offset: Offset(0, 12),
                   ),
@@ -73,13 +81,15 @@ class TimelinePage extends StatelessWidget {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.82),
+                      color: isDark
+                          ? AppColors.darkSurfaceSoft.withValues(alpha: 0.9)
+                          : Colors.white.withValues(alpha: 0.82),
                       borderRadius: BorderRadius.circular(18),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Momen sederhana kalian',
                       style: TextStyle(
-                        color: AppColors.rose,
+                        color: isDark ? AppColors.darkRose : AppColors.rose,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -96,7 +106,9 @@ class TimelinePage extends StatelessWidget {
                   Text(
                     'Timeline ini bisa terus ditambah nanti, tapi yang paling penting tetap tersimpan di sini.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.mutedText,
+                          color: isDark
+                              ? AppColors.darkMutedText
+                              : AppColors.mutedText,
                           height: 1.5,
                         ),
                   ),
@@ -128,6 +140,8 @@ class _TimelineCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return AppCard(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +187,9 @@ class _TimelineCard extends StatelessWidget {
                 Text(
                   entry.description,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.mutedText,
+                        color: isDark
+                            ? AppColors.darkMutedText
+                            : AppColors.mutedText,
                         height: 1.45,
                       ),
                 ),
