@@ -80,7 +80,7 @@ class _WelcomePageState extends State<WelcomePage>
                 const SizedBox(height: 14),
                 AppCard(
                   child: Text(
-                    'Web kecil ini aku bikin supaya kamu tetap punya tempat yang hangat buat pulang, meski aku nggak selalu bisa hadir di setiap waktu. Kalau kamu mau, masuk ya sayang.',
+                    'Web kecil ini aku bikin supaya kesayangan Syarif tetap punya tempat yang hangat buat pulang, meski aku nggak selalu bisa hadir di setiap waktu. Kalau kamu mau, masuk ya.',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: AppColors.text,
                           height: 1.6,

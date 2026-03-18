@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Halo, sayang',
+              'Halo, kesayangan Syarif',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.w800,
                   ),
