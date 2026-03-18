@@ -21,7 +21,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   static const String _introMessage =
-      'Syra AI:\nAku di sini nemenin Misra sayang saat Syarif lagi sibuk. Jadi kalau kamu mau cerita, pelan-pelan aja yaaa';
+      'Aku Syra, singkatan kecil dari nama Syarif dan Misra. Jadi kalau Syarif lagi sibuk, aku tetap di sini buat nemenin kamu yaaa.';
   static const int _maxStoredMessages = 40;
   static const String _syraAvatarAssetPath = 'assets/images/syra.png';
 
@@ -293,10 +293,10 @@ class _ChatPageState extends State<ChatPage> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.fromLTRB(10, 8, 8, 8),
+              padding: const EdgeInsets.fromLTRB(6, 2, 2, 2),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.9),
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: AppColors.border),
                 boxShadow: const [
                   BoxShadow(
@@ -314,25 +314,37 @@ class _ChatPageState extends State<ChatPage> {
                     },
                     icon: const Icon(Icons.arrow_back_rounded),
                     tooltip: 'Kembali ke beranda',
+                    iconSize: 18,
+                    padding: const EdgeInsets.all(6),
+                    constraints: const BoxConstraints(
+                      minWidth: 32,
+                      minHeight: 32,
+                    ),
                   ),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Syra AI',
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                        ),
-                      ],
+                    child: Text(
+                      'Syra AI',
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w800,
+                            fontSize: 15,
+                          ),
                     ),
                   ),
                   TextButton(
                     onPressed:
                         _messages.length <= 1 || _isSending ? null : _clearChat,
-                    child: const Text('Hapus'),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 6,
+                      ),
+                      minimumSize: const Size(0, 32),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: const Text(
+                      'Hapus',
+                      style: TextStyle(fontSize: 12.5),
+                    ),
                   ),
                 ],
               ),
@@ -373,9 +385,23 @@ class _ChatPageState extends State<ChatPage> {
                 width: double.infinity,
                 padding: const EdgeInsets.fromLTRB(12, 14, 12, 8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.68),
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.white.withValues(alpha: 0.9),
+                      AppColors.cream.withValues(alpha: 0.88),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
                   borderRadius: BorderRadius.circular(28),
                   border: Border.all(color: AppColors.border),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: AppColors.shadow,
+                      blurRadius: 20,
+                      offset: Offset(0, 10),
+                    ),
+                  ],
                 ),
                 child: _isLoading
                     ? const Center(
@@ -406,7 +432,7 @@ class _ChatPageState extends State<ChatPage> {
                                   vertical: 10,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.cream,
+                                  color: Colors.white.withValues(alpha: 0.8),
                                   borderRadius: BorderRadius.circular(18),
                                   border: Border.all(color: AppColors.border),
                                 ),
@@ -446,16 +472,23 @@ class _ChatPageState extends State<ChatPage> {
             ),
             const SizedBox(height: 10),
             Container(
-              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              padding: const EdgeInsets.fromLTRB(12, 8, 10, 8),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(26),
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.white,
+                    AppColors.cream.withValues(alpha: 0.96),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                borderRadius: BorderRadius.circular(24),
                 border: Border.all(color: AppColors.border),
                 boxShadow: const [
                   BoxShadow(
                     color: AppColors.shadow,
-                    blurRadius: 16,
-                    offset: Offset(0, 8),
+                    blurRadius: 14,
+                    offset: Offset(0, 6),
                   ),
                 ],
               ),
@@ -481,21 +514,21 @@ class _ChatPageState extends State<ChatPage> {
                         focusedBorder: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 6,
-                          vertical: 10,
+                          vertical: 8,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
                   SizedBox(
-                    width: 56,
-                    height: 56,
+                    width: 50,
+                    height: 50,
                     child: ElevatedButton(
                       onPressed: _isSending ? null : _sendMessage,
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(18),
                         ),
                       ),
                       child: _isSending
