@@ -1,8 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-const dotenv = require('dotenv');
-
 let loaded = false;
 
 function loadBackendEnv() {
@@ -18,7 +16,13 @@ function loadBackendEnv() {
     : fallbackEnvPath;
 
   if (fs.existsSync(envPath)) {
-    dotenv.config({ path: envPath });
+    try {
+      const dotenv = require('dotenv');
+      dotenv.config({ path: envPath });
+    } catch (_) {
+      // On serverless platforms like Vercel, environment variables are injected
+      // by the platform and dotenv does not need to be present.
+    }
   }
 
   loaded = true;
