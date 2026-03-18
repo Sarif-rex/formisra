@@ -437,7 +437,7 @@ class _ChatPageState extends State<ChatPage> {
                                   border: Border.all(color: AppColors.border),
                                 ),
                                 child: Text(
-                                  'Syra ada di sini buat nemenin Misra kesayangan Syarif.',
+                                  'Syra ada di sini buat nemenin Misra. Syra dibuat Syarif khusus untuk kamu.',
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme
