@@ -33,6 +33,31 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+  <script>
+    (function () {
+      if (!('serviceWorker' in navigator)) {
+        return;
+      }
+
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+          for (const registration of registrations) {
+            registration.unregister();
+          }
+        });
+
+        if ('caches' in window) {
+          caches.keys().then(function (keys) {
+            for (const key of keys) {
+              if (key.startsWith('flutter-app-') || key === 'flutter-temp-cache') {
+                caches.delete(key);
+              }
+            }
+          });
+        }
+      });
+    })();
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
