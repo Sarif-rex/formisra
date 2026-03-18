@@ -20,10 +20,26 @@ class HomePage extends StatelessWidget {
 
     return MobileShell(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 28),
+        padding: const EdgeInsets.fromLTRB(18, 16, 18, 28),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.82),
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: const Text(
+                'Tempat kecil dari Syarif',
+                style: TextStyle(
+                  color: AppColors.rose,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            const SizedBox(height: 14),
             Text(
               'Halo, kesayangan Syarif',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -39,47 +55,76 @@ class HomePage extends StatelessWidget {
                   ),
             ),
             const SizedBox(height: 22),
-            const AppCard(
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(22),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.white,
+                    AppColors.blush.withValues(alpha: 0.92),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(28),
+                border: Border.all(color: AppColors.border),
+                boxShadow: const [
+                  BoxShadow(
+                    color: AppColors.shadow,
+                    blurRadius: 22,
+                    offset: Offset(0, 12),
+                  ),
+                ],
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Selalu ada ruang kecil buat kamu di sini.',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.8),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: const Text(
+                      'Ruang kecil untuk Misra',
+                      style: TextStyle(
+                        color: AppColors.rose,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 16),
                   Text(
-                    'Kalau lagi pengen ditemenin, pengen lihat hitungan kebersamaan, atau cuma mau baca momen sederhana kalian, tinggal pilih aja.',
-                    style: TextStyle(
-                      color: AppColors.mutedText,
-                      height: 1.5,
-                    ),
+                    'Kalau lagi pengen ditemenin, semua yang penting ada di sini.',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          height: 1.25,
+                        ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Mulai ngobrol sama Syra, lihat hitungan kebersamaan, atau buka momen sederhana kalian dengan tampilan yang tetap ringan di HP.',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.mutedText,
+                          height: 1.5,
+                        ),
                   ),
                 ],
               ),
             ),
+            const SizedBox(height: 12),
+            Text(
+              'Pilih yang kamu butuhin dulu, sisanya tetap ada di sini buat dibuka kapan aja.',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.mutedText,
+                    height: 1.45,
+                  ),
+            ),
             const SizedBox(height: 20),
-            MenuCard(
-              icon: Icons.favorite_border_rounded,
-              title: 'Love Counter',
-              subtitle: 'Lihat hitungan hari, jam, menit, dan detik sejak 1 November 2024.',
-              onTap: () {
-                Navigator.of(context).pushNamed(LoveCounterPage.routeName);
-              },
-            ),
-            const SizedBox(height: 14),
-            MenuCard(
-              icon: Icons.auto_stories_rounded,
-              title: 'Timeline',
-              subtitle: 'Momen sederhana yang bisa terus ditambah nanti.',
-              onTap: () {
-                Navigator.of(context).pushNamed(TimelinePage.routeName);
-              },
-            ),
-            const SizedBox(height: 14),
             MenuCard(
               icon: Icons.chat_bubble_outline_rounded,
               title: 'Chat dengan Syra',
@@ -88,7 +133,94 @@ class HomePage extends StatelessWidget {
                 Navigator.of(context).pushNamed(ChatPage.routeName);
               },
             ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                Expanded(
+                  child: _MiniHomeCard(
+                    icon: Icons.favorite_border_rounded,
+                    title: 'Love Counter',
+                    subtitle: 'Hitungan kebersamaan',
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        LoveCounterPage.routeName,
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _MiniHomeCard(
+                    icon: Icons.auto_stories_rounded,
+                    title: 'Timeline',
+                    subtitle: 'Momen sederhana kalian',
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        TimelinePage.routeName,
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MiniHomeCard extends StatelessWidget {
+  const _MiniHomeCard({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(24),
+        child: AppCard(
+          padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 46,
+                height: 46,
+                decoration: BoxDecoration(
+                  color: AppColors.blush,
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Icon(icon, color: AppColors.rose),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.mutedText,
+                      height: 1.4,
+                    ),
+              ),
+            ],
+          ),
         ),
       ),
     );

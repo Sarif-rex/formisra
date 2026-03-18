@@ -444,7 +444,7 @@ class _ChatPageState extends State<ChatPage> {
                                       .bodySmall
                                       ?.copyWith(
                                         color: AppColors.mutedText,
-                                        height: 1.4,
+                                        height: 1.45,
                                       ),
                                 ),
                               ),
