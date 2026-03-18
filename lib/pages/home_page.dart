@@ -7,6 +7,7 @@ import '../widgets/menu_card.dart';
 import '../widgets/mobile_shell.dart';
 import '../widgets/theme_toggle_button.dart';
 import 'chat_page.dart';
+import 'note_page.dart';
 import 'timeline_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -164,6 +165,15 @@ class _HomePageState extends State<HomePage> {
               subtitle: 'Kalau pengen cerita, Syra siap nemenin Misra yaa',
               onTap: () {
                 Navigator.of(context).pushNamed(ChatPage.routeName);
+              },
+            ),
+            const SizedBox(height: 14),
+            MenuCard(
+              icon: Icons.edit_note_rounded,
+              title: 'Catatan',
+              subtitle: 'Buat simpan hal kecil yang lagi Misra pengen tulis',
+              onTap: () {
+                Navigator.of(context).pushNamed(NotePage.routeName);
               },
             ),
             const SizedBox(height: 14),

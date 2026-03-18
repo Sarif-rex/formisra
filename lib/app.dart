@@ -4,6 +4,7 @@ import 'core/theme/app_theme.dart';
 import 'pages/chat_page.dart';
 import 'pages/home_page.dart';
 import 'pages/love_counter_page.dart';
+import 'pages/note_page.dart';
 import 'pages/timeline_page.dart';
 import 'pages/welcome_page.dart';
 import 'services/theme_preferences_service.dart';
@@ -68,6 +69,7 @@ class _FormisraAppState extends State<FormisraApp> {
         WelcomePage.routeName: (_) => const WelcomePage(),
         HomePage.routeName: (_) => const HomePage(),
         LoveCounterPage.routeName: (_) => const LoveCounterPage(),
+        NotePage.routeName: (_) => const NotePage(),
         TimelinePage.routeName: (_) => const TimelinePage(),
         ChatPage.routeName: (_) => const ChatPage(),
       },
