@@ -14,14 +14,101 @@ class TimelinePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MobileShell(
-      appBar: AppBar(title: const Text('Timeline')),
       child: ListView.separated(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
-        itemCount: TimelineData.items.length,
+        padding: const EdgeInsets.fromLTRB(18, 14, 18, 24),
+        itemCount: TimelineData.items.length + 2,
         separatorBuilder: (_, _) => const SizedBox(height: 14),
         itemBuilder: (context, index) {
-          final entry = TimelineData.items[index];
-          return _TimelineCard(entry: entry);
+          if (index == 0) {
+            return Row(
+              children: [
+                IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.arrow_back_rounded),
+                  tooltip: 'Kembali',
+                ),
+                Expanded(
+                  child: Text(
+                    'Timeline',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
+                  ),
+                ),
+              ],
+            );
+          }
+
+          if (index == 1) {
+            return Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(22, 22, 22, 22),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.white,
+                    AppColors.blush.withValues(alpha: 0.9),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(28),
+                border: Border.all(color: AppColors.border),
+                boxShadow: const [
+                  BoxShadow(
+                    color: AppColors.shadow,
+                    blurRadius: 22,
+                    offset: Offset(0, 12),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.82),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: const Text(
+                      'Momen sederhana kalian',
+                      style: TextStyle(
+                        color: AppColors.rose,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Langkah kecil yang bikin cerita kalian tetap terasa hidup.',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                          height: 1.25,
+                        ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Timeline ini bisa terus ditambah nanti, tapi yang paling penting tetap tersimpan di sini.',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.mutedText,
+                          height: 1.5,
+                        ),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          final entry = TimelineData.items[index - 2];
+          final isLast = index == TimelineData.items.length + 1;
+          return _TimelineCard(
+            entry: entry,
+            isLast: isLast,
+          );
         },
       ),
     );
@@ -29,9 +116,13 @@ class TimelinePage extends StatelessWidget {
 }
 
 class _TimelineCard extends StatelessWidget {
-  const _TimelineCard({required this.entry});
+  const _TimelineCard({
+    required this.entry,
+    required this.isLast,
+  });
 
   final TimelineEntry entry;
+  final bool isLast;
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +140,12 @@ class _TimelineCard extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
               ),
-              Container(
-                width: 2,
-                height: 78,
-                color: AppColors.border,
-              ),
+              if (!isLast)
+                Container(
+                  width: 2,
+                  height: 78,
+                  color: AppColors.border,
+                ),
             ],
           ),
           const SizedBox(width: 16),

@@ -45,22 +45,72 @@ class _LoveCounterPageState extends State<LoveCounterPage> {
     final seconds = _duration.inSeconds.remainder(60);
 
     return MobileShell(
-      appBar: AppBar(title: const Text('Love Counter')),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
+        padding: const EdgeInsets.fromLTRB(18, 14, 18, 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Sejak 1 November 2024',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: AppColors.mutedText,
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.arrow_back_rounded),
+                  tooltip: 'Kembali',
+                ),
+                Expanded(
+                  child: Text(
+                    'Love Counter',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
+                        ),
                   ),
+                ),
+              ],
             ),
-            const SizedBox(height: 18),
-            AppCard(
+            const SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.fromLTRB(22, 22, 22, 22),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.white,
+                    AppColors.blush.withValues(alpha: 0.9),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(28),
+                border: Border.all(color: AppColors.border),
+                boxShadow: const [
+                  BoxShadow(
+                    color: AppColors.shadow,
+                    blurRadius: 22,
+                    offset: Offset(0, 12),
+                  ),
+                ],
+              ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.82),
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: const Text(
+                      'Sejak 1 November 2024',
+                      style: TextStyle(
+                        color: AppColors.rose,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
                   Text(
                     '$days hari',
                     style: Theme.of(context).textTheme.displaySmall?.copyWith(
@@ -70,14 +120,28 @@ class _LoveCounterPageState extends State<LoveCounterPage> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Waktu kebersamaan yang terus jalan, pelan tapi nyata.',
-                    textAlign: TextAlign.center,
+                    'Waktu kebersamaan yang terus jalan, pelan, lembut, dan tetap terasa.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.mutedText,
-                          height: 1.45,
+                          height: 1.5,
                         ),
                   ),
-                  const SizedBox(height: 22),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+            Text(
+              'Detail waktunya tetap berjalan sampai detik ini.',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.mutedText,
+                    height: 1.45,
+                  ),
+            ),
+            const SizedBox(height: 18),
+            AppCard(
+              child: Column(
+                children: [
+                  const SizedBox(height: 2),
                   Row(
                     children: [
                       Expanded(child: _CounterBox(label: 'Jam', value: hours)),
@@ -111,7 +175,14 @@ class _CounterBox extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
-        color: AppColors.blush,
+        gradient: LinearGradient(
+          colors: [
+            AppColors.blush,
+            AppColors.softPink.withValues(alpha: 0.92),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
