@@ -293,7 +293,7 @@ class _ChatPageState extends State<ChatPage> {
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.fromLTRB(10, 10, 8, 10),
+              padding: const EdgeInsets.fromLTRB(10, 8, 8, 8),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.9),
                 borderRadius: BorderRadius.circular(24),
@@ -322,16 +322,8 @@ class _ChatPageState extends State<ChatPage> {
                         Text(
                           'Syra AI',
                           style:
-                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
                                     fontWeight: FontWeight.w800,
-                                  ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'Dibuat Syarif buat nemenin Misra kesayangan Syarif.',
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: AppColors.mutedText,
                                   ),
                         ),
                       ],
@@ -419,7 +411,7 @@ class _ChatPageState extends State<ChatPage> {
                                   border: Border.all(color: AppColors.border),
                                 ),
                                 child: Text(
-                                  'Syra ada di sini buat nemenin, bukan buat buru-buru.',
+                                  'Syra ada di sini buat nemenin Misra kesayangan Syarif.',
                                   textAlign: TextAlign.center,
                                   style: Theme.of(context)
                                       .textTheme
