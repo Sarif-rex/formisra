@@ -32,9 +32,13 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
+.firebase/
+firepit-log.txt
 backend/.env
 backend/.env.*
 !backend/.env.example
+backend/node_modules/
+build/
 
 # Symbolication related
 app.*.symbols

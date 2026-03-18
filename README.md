@@ -118,6 +118,50 @@ CORS_ORIGIN=https://formisra.com
 - Render free plan bisa cold start.
 - Kalau Gemini model berubah, cukup ganti `GEMINI_MODEL` di Render.
 
+## Deploy Gratis Tanpa Kartu
+
+Pilihan paling realistis tanpa kartu untuk backend kecil ini adalah:
+
+- Frontend: Firebase Hosting
+- Backend: Vercel Functions
+
+Endpoint Vercel yang sudah disiapkan:
+
+- [api/health.js](./api/health.js)
+- [api/chat.js](./api/chat.js)
+
+### Langkah singkat
+
+1. Push repo ke GitHub.
+2. Import repo ini ke Vercel.
+3. Di Vercel, tambahkan environment variable:
+
+```env
+GEMINI_API_KEY=your_real_key
+GEMINI_MODEL=gemini-2.5-flash-lite
+CORS_ORIGIN=https://misra-romantic-web.web.app
+```
+
+4. Deploy project di Vercel.
+5. Ambil domain Vercel project, misalnya:
+
+```txt
+https://formisra.vercel.app
+```
+
+6. Pastikan health check hidup:
+
+```txt
+https://formisra.vercel.app/api/health
+```
+
+7. Build ulang frontend Firebase dengan URL backend Vercel itu:
+
+```bash
+flutter build web --release --dart-define=API_BASE_URL=https://formisra.vercel.app
+firebase deploy --only hosting
+```
+
 ## Checklist Deploy Hemat
 
 - Pakai `gemini-2.5-flash-lite` sebagai model default.

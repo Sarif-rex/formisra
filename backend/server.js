@@ -1,19 +1,11 @@
-const fs = require('fs');
-const path = require('path');
-
-const dotenv = require('dotenv');
-
-const preferredEnvPath = path.join(__dirname, '.env.openai');
-const fallbackEnvPath = path.join(__dirname, '.env');
-
-dotenv.config({
-  path: fs.existsSync(preferredEnvPath) ? preferredEnvPath : fallbackEnvPath,
-});
+const { loadBackendEnv } = require('./loadEnv');
 
 const cors = require('cors');
 const express = require('express');
 
 const chatRouter = require('./routes/chat');
+
+loadBackendEnv();
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
