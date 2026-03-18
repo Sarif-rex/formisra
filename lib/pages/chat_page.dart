@@ -22,7 +22,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   static const String _introMessage =
-      'Hai sayang, aku Syra. Syarif bikin aku khusus buat nemenin Misra di saat kamu pengen ditemani, didengerin, atau cuma mau cerita pelan-pelan. Kalau ada yang lagi kamu rasain, cerita aja ke aku ya.';
+      'Hai Misra kesayangan Syarif, aku Syra. Syarif bikin aku khusus buat nemenin Misra di saat kamu pengen ditemani, didengerin, atau cuma mau cerita pelan-pelan. Kalau ada yang lagi kamu rasain, cerita aja ke aku ya.';
   static const int _maxStoredMessages = 40;
 
   final ChatApiService _chatApiService = const ChatApiService();
@@ -30,6 +30,7 @@ class _ChatPageState extends State<ChatPage> {
       const ChatLocalStorageService();
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final FocusNode _focusNode = FocusNode();
 
   List<ChatMessage> _messages = [];
   bool _isLoading = true;
@@ -280,6 +281,7 @@ class _ChatPageState extends State<ChatPage> {
   void dispose() {
     _controller.dispose();
     _scrollController.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -287,36 +289,61 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return MobileShell(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+        padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
         child: Column(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Syra ${FormisraApp.buildMarker}',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w800,
-                            ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Tempat kecil buat ditemenin dengan tenang.',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.mutedText,
-                            ),
-                      ),
-                    ],
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 8, 10),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.9),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: AppColors.border),
+                boxShadow: const [
+                  BoxShadow(
+                    color: AppColors.shadow,
+                    blurRadius: 18,
+                    offset: Offset(0, 8),
                   ),
-                ),
-                TextButton(
-                  onPressed: _messages.length <= 1 || _isSending ? null : _clearChat,
-                  child: const Text('Hapus chat'),
-                ),
-              ],
+                ],
+              ),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(Icons.arrow_back_rounded),
+                    tooltip: 'Kembali ke beranda',
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Syra ${FormisraApp.buildMarker}',
+                          style:
+                              Theme.of(context).textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Dibuat Syarif buat nemenin Misra kesayangan Syarif.',
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: AppColors.mutedText,
+                                  ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed:
+                        _messages.length <= 1 || _isSending ? null : _clearChat,
+                    child: const Text('Hapus'),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 12),
             if (_errorMessage != null) ...[
@@ -350,71 +377,150 @@ class _ChatPageState extends State<ChatPage> {
               const SizedBox(height: 12),
             ],
             Expanded(
-              child: _isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(color: AppColors.rose),
-                    )
-                  : _messages.isEmpty
-                      ? Center(
-                          child: Text(
-                            'Belum ada chat. Kalau mau, mulai duluan aja ya.',
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  color: AppColors.mutedText,
-                                ),
-                          ),
-                        )
-                      : ListView(
-                          controller: _scrollController,
-                          padding: const EdgeInsets.only(top: 4, bottom: 8),
-                          children: _messages
-                              .map((message) => ChatBubble(message: message))
-                              .toList(),
-                        ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    minLines: 1,
-                    maxLines: 4,
-                    maxLength: 400,
-                    textCapitalization: TextCapitalization.sentences,
-                    textInputAction: TextInputAction.send,
-                    onSubmitted: (_) => _sendMessage(),
-                    decoration: const InputDecoration(
-                      hintText: 'Cerita ke Syra di sini...',
-                      counterText: '',
-                    ),
-                  ),
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.68),
+                  borderRadius: BorderRadius.circular(28),
+                  border: Border.all(color: AppColors.border),
                 ),
-                const SizedBox(width: 12),
-                SizedBox(
-                  width: 56,
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: _isSending ? null : _sendMessage,
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                    ),
-                    child: _isSending
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.2,
-                              color: Colors.white,
+                child: _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(color: AppColors.rose),
+                      )
+                    : _messages.isEmpty
+                        ? Center(
+                            child: Text(
+                              'Belum ada chat. Kalau mau, mulai duluan aja ya.',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(color: AppColors.mutedText),
                             ),
                           )
-                        : const Icon(Icons.arrow_upward_rounded),
+                        : ListView(
+                            controller: _scrollController,
+                            padding: const EdgeInsets.only(top: 4, bottom: 8),
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.only(
+                                  left: 30,
+                                  right: 30,
+                                  bottom: 12,
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.cream,
+                                  borderRadius: BorderRadius.circular(18),
+                                  border: Border.all(color: AppColors.border),
+                                ),
+                                child: Text(
+                                  'Syra ada di sini buat nemenin, bukan buat buru-buru.',
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        color: AppColors.mutedText,
+                                        height: 1.4,
+                                      ),
+                                ),
+                              ),
+                              ..._messages.map(
+                                (message) => ChatBubble(message: message),
+                              ),
+                              if (_isSending)
+                                ChatBubble(
+                                  message: ChatMessage(
+                                    id: 'typing',
+                                    role: ChatRole.assistant,
+                                    text: 'Syra lagi ngetik buat Misra...',
+                                    createdAt: DateTime.now(),
+                                  ),
+                                ),
+                            ],
+                          ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(26),
+                border: Border.all(color: AppColors.border),
+                boxShadow: const [
+                  BoxShadow(
+                    color: AppColors.shadow,
+                    blurRadius: 16,
+                    offset: Offset(0, 8),
                   ),
-                ),
-              ],
+                ],
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      focusNode: _focusNode,
+                      minLines: 1,
+                      maxLines: 4,
+                      maxLength: 400,
+                      textCapitalization: TextCapitalization.sentences,
+                      textInputAction: TextInputAction.send,
+                      onSubmitted: (_) => _sendMessage(),
+                      decoration: const InputDecoration(
+                        hintText: 'Cerita ke Syra di sini...',
+                        counterText: '',
+                        filled: false,
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 10,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  SizedBox(
+                    width: 56,
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: _isSending ? null : _sendMessage,
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: _isSending
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : const Icon(Icons.arrow_upward_rounded),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Cerita pelan-pelan aja. Syra akan jawab dengan lembut.',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppColors.mutedText,
+                  ),
             ),
           ],
         ),
