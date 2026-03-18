@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../app.dart';
 import '../core/theme/app_colors.dart';
 import '../models/chat_message.dart';
 import '../services/chat_api_service.dart';
@@ -24,6 +23,7 @@ class _ChatPageState extends State<ChatPage> {
   static const String _introMessage =
       'Hai Misra kesayangan Syarif, aku Syra. Syarif bikin aku khusus buat nemenin Misra di saat kamu pengen ditemani, didengerin, atau cuma mau cerita pelan-pelan. Kalau ada yang lagi kamu rasain, cerita aja ke aku ya.';
   static const int _maxStoredMessages = 40;
+  static const String _syraAvatarAssetPath = 'assets/images/syra.png';
 
   final ChatApiService _chatApiService = const ChatApiService();
   final ChatLocalStorageService _chatLocalStorageService =
@@ -320,7 +320,7 @@ class _ChatPageState extends State<ChatPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Syra ${FormisraApp.buildMarker}',
+                          'Syra AI',
                           style:
                               Theme.of(context).textTheme.titleLarge?.copyWith(
                                     fontWeight: FontWeight.w800,
@@ -431,7 +431,11 @@ class _ChatPageState extends State<ChatPage> {
                                 ),
                               ),
                               ..._messages.map(
-                                (message) => ChatBubble(message: message),
+                                (message) => ChatBubble(
+                                  message: message,
+                                  assistantAvatarAssetPath:
+                                      _syraAvatarAssetPath,
+                                ),
                               ),
                               if (_isSending)
                                 ChatBubble(
@@ -441,6 +445,8 @@ class _ChatPageState extends State<ChatPage> {
                                     text: 'Syra lagi ngetik buat Misra...',
                                     createdAt: DateTime.now(),
                                   ),
+                                  assistantAvatarAssetPath:
+                                      _syraAvatarAssetPath,
                                 ),
                             ],
                           ),

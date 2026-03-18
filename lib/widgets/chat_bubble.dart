@@ -8,10 +8,47 @@ class ChatBubble extends StatelessWidget {
     super.key,
     required this.message,
     this.showAvatar = true,
+    this.assistantAvatarAssetPath,
   });
 
   final ChatMessage message;
   final bool showAvatar;
+  final String? assistantAvatarAssetPath;
+
+  Widget _buildAssistantAvatar() {
+    final assetPath = assistantAvatarAssetPath?.trim() ?? '';
+    if (assetPath.isNotEmpty) {
+      return ClipOval(
+        child: Image.asset(
+          assetPath,
+          width: 34,
+          height: 34,
+          fit: BoxFit.cover,
+          errorBuilder: (_, _, _) => _buildAssistantFallback(),
+        ),
+      );
+    }
+    return _buildAssistantFallback();
+  }
+
+  Widget _buildAssistantFallback() {
+    return Container(
+      width: 34,
+      height: 34,
+      decoration: const BoxDecoration(
+        color: AppColors.softPink,
+        shape: BoxShape.circle,
+      ),
+      alignment: Alignment.center,
+      child: const Text(
+        'S',
+        style: TextStyle(
+          color: AppColors.text,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,22 +90,7 @@ class ChatBubble extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (!isUser && showAvatar) ...[
-            Container(
-              width: 34,
-              height: 34,
-              decoration: const BoxDecoration(
-                color: AppColors.softPink,
-                shape: BoxShape.circle,
-              ),
-              alignment: Alignment.center,
-              child: const Text(
-                'S',
-                style: TextStyle(
-                  color: AppColors.text,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
+            _buildAssistantAvatar(),
             const SizedBox(width: 8),
           ],
           Flexible(child: bubble),
