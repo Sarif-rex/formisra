@@ -27,11 +27,20 @@ class MobileShell extends StatelessWidget {
           ),
         ),
         child: SafeArea(
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 430),
-              child: child,
-            ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 430),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: constraints.maxHeight,
+                    child: child,
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),
