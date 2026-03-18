@@ -1,0 +1,407 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
+import '../core/theme/app_colors.dart';
+import '../models/chat_message.dart';
+import '../services/chat_api_service.dart';
+import '../services/chat_local_storage_service.dart';
+import '../widgets/app_card.dart';
+import '../widgets/chat_bubble.dart';
+import '../widgets/mobile_shell.dart';
+
+class ChatPage extends StatefulWidget {
+  const ChatPage({super.key});
+
+  static const routeName = '/chat';
+
+  @override
+  State<ChatPage> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<ChatPage> {
+  static const String _introMessage =
+      'Hai sayang, aku Syra. Syarif bikin aku khusus buat nemenin Misra di saat kamu pengen ditemani, didengerin, atau cuma mau cerita pelan-pelan. Kalau ada yang lagi kamu rasain, cerita aja ke aku ya.';
+  static const int _maxStoredMessages = 40;
+
+  final ChatApiService _chatApiService = const ChatApiService();
+  final ChatLocalStorageService _chatLocalStorageService =
+      const ChatLocalStorageService();
+  final TextEditingController _controller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  List<ChatMessage> _messages = [];
+  bool _isLoading = true;
+  bool _isSending = false;
+  String? _errorMessage;
+  String? _retryMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMessages();
+  }
+
+  Future<void> _loadMessages() async {
+    try {
+      final storedMessages = await _chatLocalStorageService.loadMessages();
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _messages = storedMessages.isEmpty
+            ? [_buildIntroMessage()]
+            : _trimStoredMessages(storedMessages);
+        _isLoading = false;
+      });
+      _scrollToBottom();
+    } catch (_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _messages = [_buildIntroMessage()];
+        _isLoading = false;
+        _errorMessage = 'Riwayat chat belum bisa dibuka, tapi kamu masih bisa mulai ngobrol.';
+      });
+    }
+  }
+
+  ChatMessage _buildIntroMessage() {
+    return ChatMessage(
+      id: 'intro',
+      role: ChatRole.assistant,
+      text: _introMessage,
+      createdAt: DateTime.now(),
+    );
+  }
+
+  Future<void> _clearChat() async {
+    if (_isSending) {
+      return;
+    }
+
+    final shouldClear = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Hapus percakapan?'),
+          content: const Text(
+            'Riwayat chat di browser ini akan dihapus dan Syra akan mulai lagi dari pesan awal.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('Batal'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Hapus'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldClear != true || !mounted) {
+      return;
+    }
+
+    final resetMessages = [_buildIntroMessage()];
+    setState(() {
+      _messages = resetMessages;
+      _errorMessage = null;
+      _retryMessage = null;
+    });
+    await _chatLocalStorageService.saveMessages(resetMessages);
+    _scrollToBottom();
+  }
+
+  Future<void> _sendMessage() async {
+    final text = _controller.text.trim();
+    if (text.isEmpty || _isSending) {
+      return;
+    }
+
+    final historyBeforeSend = List<ChatMessage>.from(_messages);
+
+    final userMessage = ChatMessage(
+      id: DateTime.now().microsecondsSinceEpoch.toString(),
+      role: ChatRole.user,
+      text: text,
+      createdAt: DateTime.now(),
+    );
+
+    setState(() {
+      _errorMessage = null;
+      _retryMessage = null;
+      _isSending = true;
+      _messages = _trimStoredMessages([..._messages, userMessage]);
+    });
+    _controller.clear();
+    _scrollToBottom();
+
+    try {
+      await _chatLocalStorageService.saveMessages(_messages);
+      final reply = await _chatApiService.sendMessage(
+        message: text,
+        history: historyBeforeSend,
+      );
+      final aiMessage = ChatMessage(
+        id: DateTime.now().microsecondsSinceEpoch.toString(),
+        role: ChatRole.assistant,
+        text: reply,
+        createdAt: DateTime.now(),
+      );
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _messages = _trimStoredMessages([..._messages, aiMessage]);
+      });
+      await _chatLocalStorageService.saveMessages(_messages);
+      _scrollToBottom();
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _retryMessage = text;
+        _errorMessage = _mapChatError(error);
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSending = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _retryLastMessage() async {
+    final retryMessage = _retryMessage;
+    if (retryMessage == null || _isSending) {
+      return;
+    }
+
+    final history = List<ChatMessage>.from(_messages);
+
+    setState(() {
+      _errorMessage = null;
+      _isSending = true;
+    });
+
+    try {
+      final retryHistory = List<ChatMessage>.from(history);
+      for (var index = retryHistory.length - 1; index >= 0; index--) {
+        final item = retryHistory[index];
+        if (item.isUser && item.text == retryMessage) {
+          retryHistory.removeAt(index);
+          break;
+        }
+      }
+
+      final reply = await _chatApiService.sendMessage(
+        message: retryMessage,
+        history: retryHistory,
+      );
+
+      final aiMessage = ChatMessage(
+        id: DateTime.now().microsecondsSinceEpoch.toString(),
+        role: ChatRole.assistant,
+        text: reply,
+        createdAt: DateTime.now(),
+      );
+
+      if (!mounted) {
+        return;
+      }
+
+      setState(() {
+        _retryMessage = null;
+        _messages = _trimStoredMessages([..._messages, aiMessage]);
+      });
+      await _chatLocalStorageService.saveMessages(_messages);
+      _scrollToBottom();
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _errorMessage = _mapChatError(error);
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSending = false;
+        });
+      }
+    }
+  }
+
+  String _mapChatError(Object error) {
+    if (error is TimeoutException) {
+      return 'Syra lagi butuh waktu sedikit lebih lama. Coba lagi ya.';
+    }
+
+    if (error is ChatApiException) {
+      return error.message;
+    }
+
+    return 'Syra belum bisa balas sekarang. Coba lagi sebentar ya.';
+  }
+
+  List<ChatMessage> _trimStoredMessages(List<ChatMessage> messages) {
+    if (messages.length <= _maxStoredMessages) {
+      return messages;
+    }
+
+    return messages.sublist(messages.length - _maxStoredMessages);
+  }
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!_scrollController.hasClients) {
+        return;
+      }
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent + 120,
+        duration: const Duration(milliseconds: 240),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MobileShell(
+      appBar: AppBar(
+        title: const Text('Syra'),
+        actions: [
+          TextButton(
+            onPressed: _messages.length <= 1 || _isSending ? null : _clearChat,
+            child: const Text('Hapus chat'),
+          ),
+        ],
+      ),
+      bottomBar: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+        child: SafeArea(
+          top: false,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _controller,
+                  minLines: 1,
+                  maxLines: 4,
+                  maxLength: 400,
+                  textCapitalization: TextCapitalization.sentences,
+                  textInputAction: TextInputAction.send,
+                  onSubmitted: (_) => _sendMessage(),
+                  decoration: const InputDecoration(
+                    hintText: 'Cerita ke Syra di sini...',
+                    counterText: '',
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              SizedBox(
+                width: 56,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: _isSending ? null : _sendMessage,
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: _isSending
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Icon(Icons.arrow_upward_rounded),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+        child: Column(
+          children: [
+            if (_errorMessage != null) ...[
+              AppCard(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.info_outline_rounded,
+                      color: AppColors.rose,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        _errorMessage!,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: AppColors.text,
+                            ),
+                      ),
+                    ),
+                    if (_retryMessage != null) ...[
+                      const SizedBox(width: 10),
+                      TextButton(
+                        onPressed: _isSending ? null : _retryLastMessage,
+                        child: const Text('Coba lagi'),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
+            Expanded(
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(color: AppColors.rose),
+                    )
+                  : _messages.isEmpty
+                      ? Center(
+                          child: Text(
+                            'Belum ada chat. Kalau mau, mulai duluan aja ya.',
+                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  color: AppColors.mutedText,
+                                ),
+                          ),
+                        )
+                      : ListView(
+                          controller: _scrollController,
+                          children: _messages
+                              .map((message) => ChatBubble(message: message))
+                              .toList(),
+                        ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
