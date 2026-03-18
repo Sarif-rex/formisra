@@ -21,7 +21,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   static const String _introMessage =
-      'Hai Misra kesayangan Syarif, aku Syra. Syarif bikin aku khusus buat nemenin Misra di saat kamu pengen ditemani, didengerin, atau cuma mau cerita pelan-pelan. Kalau ada yang lagi kamu rasain, cerita aja ke aku ya.';
+      'Syra AI:\nAku di sini nemenin Misra sayang saat Syarif lagi sibuk. Jadi kalau kamu mau cerita, pelan-pelan aja yaaa';
   static const int _maxStoredMessages = 40;
   static const String _syraAvatarAssetPath = 'assets/images/syra.png';
 
@@ -289,7 +289,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return MobileShell(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+        padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
         child: Column(
           children: [
             Container(
@@ -337,7 +337,7 @@ class _ChatPageState extends State<ChatPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             if (_errorMessage != null) ...[
               AppCard(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -371,7 +371,7 @@ class _ChatPageState extends State<ChatPage> {
             Expanded(
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
+                padding: const EdgeInsets.fromLTRB(12, 14, 12, 8),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.68),
                   borderRadius: BorderRadius.circular(28),
@@ -397,9 +397,9 @@ class _ChatPageState extends State<ChatPage> {
                             children: [
                               Container(
                                 margin: const EdgeInsets.only(
-                                  left: 30,
-                                  right: 30,
-                                  bottom: 12,
+                                  left: 24,
+                                  right: 24,
+                                  bottom: 14,
                                 ),
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 14,
@@ -444,9 +444,9 @@ class _ChatPageState extends State<ChatPage> {
                           ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             Container(
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(26),
@@ -518,6 +518,7 @@ class _ChatPageState extends State<ChatPage> {
               'Cerita pelan-pelan aja. Syra akan jawab dengan lembut.',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: AppColors.mutedText,
+                    fontSize: 11.5,
                   ),
             ),
           ],
