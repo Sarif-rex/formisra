@@ -147,7 +147,7 @@ class _WelcomePageState extends State<WelcomePage>
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'Web kecil ini aku bikin supaya kesayangan Syarif tetap punya tempat yang hangat buat pulang dan tetap merasa ditemenin',
+                        'Web kecil ini aku bikin supaya Misrakuu sayang tetap punya tempat yang hangat buat pulang dan tetap merasa ditemenin',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: isDark
                                   ? AppColors.darkText
@@ -159,7 +159,7 @@ class _WelcomePageState extends State<WelcomePage>
                       AppCard(
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                         child: Text(
-                          'Di sini ada Syra, hitungan kebersamaan, dan momen sederhana yang bisa dibuka kapan pun kamu butuh.',
+                          'Di sini ada Syra, ada waktu kebersamaan kita, dan ada hal-hal kecil yang bisa Misrakuu buka kapan pun lagi pengen ditemenin',
                           style:
                               Theme.of(context).textTheme.bodyMedium?.copyWith(
                                     color: isDark
