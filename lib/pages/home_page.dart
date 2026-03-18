@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
-import '../services/greeting_service.dart';
 import '../widgets/menu_card.dart';
 import '../widgets/mobile_shell.dart';
 import '../widgets/theme_toggle_button.dart';
@@ -46,7 +45,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final greeting = GreetingService.forCurrentTime(DateTime.now());
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final days = _duration.inDays;
     final hours = _duration.inHours.remainder(24);
@@ -63,34 +61,34 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Halo, kesayangan Syarif',
-                        style:
-                            Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                ),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    decoration: BoxDecoration(
+                      color: isDark
+                          ? AppColors.darkSurfaceSoft.withValues(alpha: 0.9)
+                          : Colors.white.withValues(alpha: 0.82),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: isDark ? AppColors.darkBorder : AppColors.border,
                       ),
-                      const SizedBox(height: 10),
-                      Text(
-                        greeting,
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: isDark
-                                  ? AppColors.darkMutedText
-                                  : AppColors.mutedText,
-                              height: 1.45,
-                            ),
+                    ),
+                    child: Text(
+                      'Ruang kecil untuk Misra',
+                      style: TextStyle(
+                        color: isDark ? AppColors.darkRose : AppColors.rose,
+                        fontWeight: FontWeight.w700,
                       ),
-                    ],
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
                 const ThemeToggleButton(),
               ],
             ),
-            const SizedBox(height: 22),
+            const SizedBox(height: 16),
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(22),
@@ -123,28 +121,8 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? AppColors.darkSurfaceSoft.withValues(alpha: 0.9)
-                          : Colors.white.withValues(alpha: 0.8),
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Text(
-                      'Ruang kecil untuk Misra',
-                      style: TextStyle(
-                        color: isDark ? AppColors.darkRose : AppColors.rose,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
                   Text(
-                    'Kalau Misra lagi pengen ditemenin, Syra ada di sini yaa',
+                    'Syarif bikin AI Syra supaya Misra tetap punya teman di sini yaa',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w800,
                           height: 1.25,
@@ -269,7 +247,7 @@ class _HomeLoveCounterCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Waktu kebersamaan kalian tetap jalan sampai sekarang',
+            'Waktu kebersamaan kita tetap jalan sampai sekarang',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color:
                       isDark ? AppColors.darkMutedText : AppColors.mutedText,
