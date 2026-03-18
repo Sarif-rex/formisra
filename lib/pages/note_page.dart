@@ -190,7 +190,7 @@ class _NotePageState extends State<NotePage> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Kalau ada yang pengen disimpan, tulis aja di sini yaa',
+                    'Kalau ada yang pengen Misra simpan, tulis aja di sini yaa',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w800,
                           height: 1.25,
@@ -198,7 +198,7 @@ class _NotePageState extends State<NotePage> {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Catatan ini tersimpan di browser ini, jadi bisa Misra buka lagi kapan pun',
+                    'Catatan kecil ini tetap ada di browser ini, jadi bisa Misra buka lagi kapan pun pengen lihat',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: isDark
                               ? AppColors.darkMutedText
@@ -226,7 +226,7 @@ class _NotePageState extends State<NotePage> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  'Catatan untuk hari ini',
+                                  'Catatan kecil untuk Misra',
                                   style: Theme.of(context)
                                       .textTheme
                                       .titleMedium
@@ -261,7 +261,7 @@ class _NotePageState extends State<NotePage> {
                                   TextCapitalization.sentences,
                               decoration: const InputDecoration(
                                 hintText:
-                                    'Tulis apa pun yang lagi Misra rasain atau pengen disimpan di sini',
+                                    'Tulis apa pun yang lagi Misra rasain, inget, atau pengen disimpan di sini',
                                 alignLabelWithHint: true,
                               ),
                             ),
@@ -271,8 +271,8 @@ class _NotePageState extends State<NotePage> {
                             children: [
                               Text(
                                 _isSaving
-                                    ? 'Menyimpan...'
-                                    : 'Tersimpan di browser ini',
+                                    ? 'Lagi disimpan yaa...'
+                                    : 'Sudah tersimpan di browser ini',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodySmall
