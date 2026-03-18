@@ -1,72 +1,94 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../core/theme/app_colors.dart';
 import '../services/greeting_service.dart';
-import '../widgets/app_card.dart';
 import '../widgets/menu_card.dart';
 import '../widgets/mobile_shell.dart';
 import '../widgets/theme_toggle_button.dart';
 import 'chat_page.dart';
-import 'love_counter_page.dart';
 import 'timeline_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   static const routeName = '/home';
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  static final DateTime _startedAt = DateTime(2024, 11, 1);
+
+  late Timer _timer;
+  Duration _duration = DateTime.now().difference(_startedAt);
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _duration = DateTime.now().difference(_startedAt);
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final greeting = GreetingService.forCurrentTime(DateTime.now());
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final days = _duration.inDays;
+    final hours = _duration.inHours.remainder(24);
+    final minutes = _duration.inMinutes.remainder(60);
+    final seconds = _duration.inSeconds.remainder(60);
 
     return MobileShell(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(18, 16, 18, 28),
+        padding: const EdgeInsets.fromLTRB(18, 18, 18, 28),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: isDark
-                        ? AppColors.darkSurfaceSoft.withValues(alpha: 0.9)
-                        : Colors.white.withValues(alpha: 0.82),
-                    borderRadius: BorderRadius.circular(18),
-                    border: Border.all(
-                      color: isDark ? AppColors.darkBorder : AppColors.border,
-                    ),
-                  ),
-                  child: Text(
-                    'Tempat kecil dari Syarif',
-                    style: TextStyle(
-                      color: isDark ? AppColors.darkRose : AppColors.rose,
-                      fontWeight: FontWeight.w700,
-                    ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Halo, kesayangan Syarif',
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        greeting,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: isDark
+                                  ? AppColors.darkMutedText
+                                  : AppColors.mutedText,
+                              height: 1.45,
+                            ),
+                      ),
+                    ],
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(width: 12),
                 const ThemeToggleButton(),
               ],
-            ),
-            const SizedBox(height: 14),
-            Text(
-              'Halo, kesayangan Syarif',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              greeting,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color:
-                        isDark ? AppColors.darkMutedText : AppColors.mutedText,
-                    height: 1.45,
-                  ),
             ),
             const SizedBox(height: 22),
             Container(
@@ -94,7 +116,7 @@ class HomePage extends StatelessWidget {
                   BoxShadow(
                     color: isDark ? AppColors.darkShadow : AppColors.shadow,
                     blurRadius: 22,
-                    offset: Offset(0, 12),
+                    offset: const Offset(0, 12),
                   ),
                 ],
               ),
@@ -112,11 +134,11 @@ class HomePage extends StatelessWidget {
                           : Colors.white.withValues(alpha: 0.8),
                       borderRadius: BorderRadius.circular(18),
                     ),
-                  child: Text(
-                    'Ruang kecil untuk Misra',
-                    style: TextStyle(
-                      color: isDark ? AppColors.darkRose : AppColors.rose,
-                      fontWeight: FontWeight.w700,
+                    child: Text(
+                      'Ruang kecil untuk Misra',
+                      style: TextStyle(
+                        color: isDark ? AppColors.darkRose : AppColors.rose,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
@@ -141,7 +163,7 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 14),
             Text(
               'Pilih yang Misra mau dulu yaa, semuanya dibuat buat nemenin kamu',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
@@ -150,7 +172,14 @@ class HomePage extends StatelessWidget {
                     height: 1.45,
                   ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 18),
+            _HomeLoveCounterCard(
+              days: days,
+              hours: hours,
+              minutes: minutes,
+              seconds: seconds,
+            ),
+            const SizedBox(height: 16),
             MenuCard(
               icon: Icons.chat_bubble_outline_rounded,
               title: 'Chat dengan Syra',
@@ -160,34 +189,13 @@ class HomePage extends StatelessWidget {
               },
             ),
             const SizedBox(height: 14),
-            Row(
-              children: [
-                Expanded(
-                  child: _MiniHomeCard(
-                    icon: Icons.favorite_border_rounded,
-                    title: 'Love Counter',
-                    subtitle: 'Buat lihat waktu yang terus jalan bareng yaa',
-                    onTap: () {
-                      Navigator.of(context).pushNamed(
-                        LoveCounterPage.routeName,
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _MiniHomeCard(
-                    icon: Icons.auto_stories_rounded,
-                    title: 'Timeline',
-                    subtitle: 'Buat lihat momen kecil yang tetap berarti yaa',
-                    onTap: () {
-                      Navigator.of(context).pushNamed(
-                        TimelinePage.routeName,
-                      );
-                    },
-                  ),
-                ),
-              ],
+            MenuCard(
+              icon: Icons.auto_stories_rounded,
+              title: 'Timeline',
+              subtitle: 'Buat lihat momen kecil yang tetap berarti',
+              onTap: () {
+                Navigator.of(context).pushNamed(TimelinePage.routeName);
+              },
             ),
           ],
         ),
@@ -196,67 +204,148 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class _MiniHomeCard extends StatelessWidget {
-  const _MiniHomeCard({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
+class _HomeLoveCounterCard extends StatelessWidget {
+  const _HomeLoveCounterCard({
+    required this.days,
+    required this.hours,
+    required this.minutes,
+    required this.seconds,
   });
 
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
+  final int days;
+  final int hours;
+  final int minutes;
+  final int seconds;
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(24),
-        child: AppCard(
-          padding: const EdgeInsets.fromLTRB(16, 18, 16, 18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 46,
-                height: 46,
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? AppColors.darkSurfaceSoft
-                      : AppColors.blush,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Icon(
-                  icon,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 18),
+      decoration: BoxDecoration(
+        color: isDark
+            ? AppColors.darkSurface.withValues(alpha: 0.95)
+            : Colors.white.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(
+          color: isDark ? AppColors.darkBorder : AppColors.border,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: isDark ? AppColors.darkShadow : AppColors.shadow,
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: isDark
+                  ? AppColors.darkSurfaceSoft.withValues(alpha: 0.9)
+                  : AppColors.blush.withValues(alpha: 0.8),
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Text(
+              'Love Counter',
+              style: TextStyle(
+                color: isDark ? AppColors.darkRose : AppColors.rose,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            '$days hari',
+            style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  fontWeight: FontWeight.w800,
                   color: isDark ? AppColors.darkRose : AppColors.rose,
                 ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Waktu kebersamaan kalian tetap jalan sampai sekarang',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color:
+                      isDark ? AppColors.darkMutedText : AppColors.mutedText,
+                  height: 1.45,
+                ),
+          ),
+          const SizedBox(height: 18),
+          Row(
+            children: [
+              Expanded(
+                child: _HomeCounterChip(label: 'Jam', value: hours),
               ),
-              const SizedBox(height: 14),
-              Text(
-                title,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _HomeCounterChip(label: 'Menit', value: minutes),
               ),
-              const SizedBox(height: 6),
-              Text(
-                subtitle,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: isDark
-                          ? AppColors.darkMutedText
-                          : AppColors.mutedText,
-                      height: 1.4,
-                    ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _HomeCounterChip(label: 'Detik', value: seconds),
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HomeCounterChip extends StatelessWidget {
+  const _HomeCounterChip({
+    required this.label,
+    required this.value,
+  });
+
+  final String label;
+  final int value;
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 14),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: isDark
+              ? [
+                  AppColors.darkSurfaceSoft,
+                  AppColors.darkBorder,
+                ]
+              : [
+                  AppColors.blush,
+                  AppColors.softPink.withValues(alpha: 0.95),
+                ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
         ),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        children: [
+          Text(
+            value.toString().padLeft(2, '0'),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color:
+                      isDark ? AppColors.darkMutedText : AppColors.mutedText,
+                ),
+          ),
+        ],
       ),
     );
   }
