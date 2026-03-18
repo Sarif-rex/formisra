@@ -147,7 +147,7 @@ class _WelcomePageState extends State<WelcomePage>
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'Web kecil ini aku bikin supaya kesayangan Syarif tetap punya tempat yang hangat buat pulang, meski aku nggak selalu bisa hadir di setiap waktu.',
+                        'Web kecil ini aku bikin supaya kesayangan Syarif tetap punya tempat yang hangat buat pulang dan tetap merasa ditemenin',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: isDark
                                   ? AppColors.darkText
@@ -174,7 +174,7 @@ class _WelcomePageState extends State<WelcomePage>
                 ),
                 const SizedBox(height: 18),
                 Text(
-                  'Dibuat ringan, hangat, dan dekat buat kesayangan Syarif.',
+                  'Kalau mau, masuk aja yaa. Semuanya udah disiapin di sini buat nemenin kamu',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: isDark
                             ? AppColors.darkMutedText
