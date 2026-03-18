@@ -112,17 +112,17 @@ class HomePage extends StatelessWidget {
                           : Colors.white.withValues(alpha: 0.8),
                       borderRadius: BorderRadius.circular(18),
                     ),
-                    child: Text(
-                      'Ruang kecil untuk Misra',
-                      style: TextStyle(
-                        color: isDark ? AppColors.darkRose : AppColors.rose,
-                        fontWeight: FontWeight.w700,
+                  child: Text(
+                    'Ruang kecil untuk Misra',
+                    style: TextStyle(
+                      color: isDark ? AppColors.darkRose : AppColors.rose,
+                      fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Kalau lagi pengen ditemenin, semua yang penting ada di sini yaa.',
+                    'Kalau Misra lagi pengen ditemenin, Syra ada di sini yaa',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w800,
                           height: 1.25,
@@ -130,7 +130,7 @@ class HomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Kalau mau, mulai ngobrol sama Syra, lihat hitungan kebersamaan, atau buka momen sederhana kalian pelan-pelan yaa.',
+                    'Kalau hati Misra lagi capek, lagi kangen, atau cuma pengen ada yang dengerin, buka aja yaa. Di sini ada Syra, ada hitungan kebersamaan, dan ada momen kecil yang disimpan buat Misra',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: isDark
                               ? AppColors.darkMutedText
@@ -143,7 +143,7 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'Pilih yang kamu butuhin dulu yaa, sisanya tetap ada di sini buat dibuka kapan aja.',
+              'Pilih yang Misra mau dulu yaa, semuanya dibuat buat nemenin kamu',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color:
                         isDark ? AppColors.darkMutedText : AppColors.mutedText,
@@ -154,7 +154,7 @@ class HomePage extends StatelessWidget {
             MenuCard(
               icon: Icons.chat_bubble_outline_rounded,
               title: 'Chat dengan Syra',
-              subtitle: 'Tempat ngobrol hangat saat kamu pengen ditemenin yaa.',
+              subtitle: 'Kalau pengen cerita, Syra siap nemenin Misra yaa',
               onTap: () {
                 Navigator.of(context).pushNamed(ChatPage.routeName);
               },
@@ -166,7 +166,7 @@ class HomePage extends StatelessWidget {
                   child: _MiniHomeCard(
                     icon: Icons.favorite_border_rounded,
                     title: 'Love Counter',
-                    subtitle: 'Hitungan kebersamaan yaa',
+                    subtitle: 'Buat lihat waktu yang terus jalan bareng yaa',
                     onTap: () {
                       Navigator.of(context).pushNamed(
                         LoveCounterPage.routeName,
@@ -179,7 +179,7 @@ class HomePage extends StatelessWidget {
                   child: _MiniHomeCard(
                     icon: Icons.auto_stories_rounded,
                     title: 'Timeline',
-                    subtitle: 'Momen sederhana kalian yaa',
+                    subtitle: 'Buat lihat momen kecil yang tetap berarti yaa',
                     onTap: () {
                       Navigator.of(context).pushNamed(
                         TimelinePage.routeName,
