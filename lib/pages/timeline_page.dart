@@ -5,6 +5,7 @@ import '../data/timeline_data.dart';
 import '../models/timeline_entry.dart';
 import '../widgets/app_card.dart';
 import '../widgets/mobile_shell.dart';
+import '../widgets/theme_toggle_button.dart';
 
 class TimelinePage extends StatelessWidget {
   const TimelinePage({super.key});
@@ -35,6 +36,7 @@ class TimelinePage extends StatelessWidget {
                         ),
                   ),
                 ),
+                const ThemeToggleButton(),
               ],
             );
           }

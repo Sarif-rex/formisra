@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
 import '../widgets/app_card.dart';
 import '../widgets/mobile_shell.dart';
+import '../widgets/theme_toggle_button.dart';
 import 'home_page.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -47,7 +48,7 @@ class _WelcomePageState extends State<WelcomePage>
   Widget build(BuildContext context) {
     return MobileShell(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 28, 20, 24),
+        padding: const EdgeInsets.fromLTRB(18, 20, 18, 20),
         child: FadeTransition(
           opacity: _fadeAnimation,
           child: SlideTransition(
@@ -55,41 +56,103 @@ class _WelcomePageState extends State<WelcomePage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const Align(
+                  alignment: Alignment.topRight,
+                  child: ThemeToggleButton(),
+                ),
                 const Spacer(),
                 Container(
-                  width: 74,
-                  height: 74,
+                  width: double.infinity,
+                  padding: const EdgeInsets.fromLTRB(22, 24, 22, 22),
                   decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.72),
-                    borderRadius: BorderRadius.circular(24),
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.white.withValues(alpha: 0.96),
+                        AppColors.blush.withValues(alpha: 0.9),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(30),
                     border: Border.all(color: AppColors.border),
-                  ),
-                  child: const Icon(
-                    Icons.favorite_rounded,
-                    color: AppColors.rose,
-                    size: 34,
-                  ),
-                ),
-                const SizedBox(height: 28),
-                Text(
-                  'Untuk Misra',
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
+                    boxShadow: const [
+                      BoxShadow(
+                        color: AppColors.shadow,
+                        blurRadius: 24,
+                        offset: Offset(0, 12),
                       ),
-                ),
-                const SizedBox(height: 14),
-                AppCard(
-                  child: Text(
-                    'Web kecil ini aku bikin supaya kesayangan Syarif tetap punya tempat yang hangat buat pulang, meski aku nggak selalu bisa hadir di setiap waktu. Kalau kamu mau, masuk ya.',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppColors.text,
-                          height: 1.6,
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 76,
+                        height: 76,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.9),
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(color: AppColors.border),
                         ),
+                        child: const Icon(
+                          Icons.favorite_rounded,
+                          color: AppColors.rose,
+                          size: 34,
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.82),
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: const Text(
+                          'Tempat kecil dari Syarif',
+                          style: TextStyle(
+                            color: AppColors.rose,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Text(
+                        'Untuk Misra',
+                        style:
+                            Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.1,
+                                ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Web kecil ini aku bikin supaya kesayangan Syarif tetap punya tempat yang hangat buat pulang, meski aku nggak selalu bisa hadir di setiap waktu.',
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: AppColors.text,
+                              height: 1.6,
+                            ),
+                      ),
+                      const SizedBox(height: 16),
+                      AppCard(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                        child: Text(
+                          'Di sini ada Syra, hitungan kebersamaan, dan momen sederhana yang bisa dibuka kapan pun kamu butuh.',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppColors.mutedText,
+                                    height: 1.5,
+                                  ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 22),
+                const SizedBox(height: 18),
                 Text(
-                  'Dari Syarif, buat nemenin hari-hari Misra dengan cara yang sederhana.',
+                  'Dibuat ringan, hangat, dan dekat buat kesayangan Syarif.',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.mutedText,
                         height: 1.45,

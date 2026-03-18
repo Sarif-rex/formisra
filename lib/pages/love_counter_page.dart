@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../core/theme/app_colors.dart';
 import '../widgets/app_card.dart';
 import '../widgets/mobile_shell.dart';
+import '../widgets/theme_toggle_button.dart';
 
 class LoveCounterPage extends StatefulWidget {
   const LoveCounterPage({super.key});
@@ -65,6 +66,7 @@ class _LoveCounterPageState extends State<LoveCounterPage> {
                         ),
                   ),
                 ),
+                const ThemeToggleButton(),
               ],
             ),
             const SizedBox(height: 10),

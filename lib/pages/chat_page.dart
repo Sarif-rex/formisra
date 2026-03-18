@@ -9,6 +9,7 @@ import '../services/chat_local_storage_service.dart';
 import '../widgets/app_card.dart';
 import '../widgets/chat_bubble.dart';
 import '../widgets/mobile_shell.dart';
+import '../widgets/theme_toggle_button.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -330,6 +331,8 @@ class _ChatPageState extends State<ChatPage> {
                           ),
                     ),
                   ),
+                  const SizedBox(width: 4),
+                  const ThemeToggleButton(),
                   TextButton(
                     onPressed:
                         _messages.length <= 1 || _isSending ? null : _clearChat,

@@ -19,6 +19,8 @@ class MenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -31,10 +33,15 @@ class MenuCard extends StatelessWidget {
                 width: 52,
                 height: 52,
                 decoration: BoxDecoration(
-                  color: AppColors.blush,
+                  color: isDark
+                      ? AppColors.darkSurfaceSoft
+                      : AppColors.blush,
                   borderRadius: BorderRadius.circular(18),
                 ),
-                child: Icon(icon, color: AppColors.rose),
+                child: Icon(
+                  icon,
+                  color: isDark ? AppColors.darkRose : AppColors.rose,
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -51,7 +58,9 @@ class MenuCard extends StatelessWidget {
                     Text(
                       subtitle,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.mutedText,
+                            color: isDark
+                                ? AppColors.darkMutedText
+                                : AppColors.mutedText,
                             height: 1.4,
                           ),
                     ),
@@ -59,7 +68,10 @@ class MenuCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              const Icon(Icons.chevron_right_rounded, color: AppColors.mutedText),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: isDark ? AppColors.darkMutedText : AppColors.mutedText,
+              ),
             ],
           ),
         ),

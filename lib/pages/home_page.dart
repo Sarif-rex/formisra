@@ -5,6 +5,7 @@ import '../services/greeting_service.dart';
 import '../widgets/app_card.dart';
 import '../widgets/menu_card.dart';
 import '../widgets/mobile_shell.dart';
+import '../widgets/theme_toggle_button.dart';
 import 'chat_page.dart';
 import 'love_counter_page.dart';
 import 'timeline_page.dart';
@@ -24,20 +25,27 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.82),
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(color: AppColors.border),
-              ),
-              child: const Text(
-                'Tempat kecil dari Syarif',
-                style: TextStyle(
-                  color: AppColors.rose,
-                  fontWeight: FontWeight.w700,
+            Row(
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.82),
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(color: AppColors.border),
+                  ),
+                  child: const Text(
+                    'Tempat kecil dari Syarif',
+                    style: TextStyle(
+                      color: AppColors.rose,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
-              ),
+                const Spacer(),
+                const ThemeToggleButton(),
+              ],
             ),
             const SizedBox(height: 14),
             Text(
@@ -99,7 +107,7 @@ class HomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Kalau lagi pengen ditemenin, semua yang penting ada di sini.',
+                    'Kalau lagi pengen ditemenin, semua yang penting ada di sini yaa.',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w800,
                           height: 1.25,
@@ -107,7 +115,7 @@ class HomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Mulai ngobrol sama Syra, lihat hitungan kebersamaan, atau buka momen sederhana kalian dengan tampilan yang tetap ringan di HP.',
+                    'Kalau mau, mulai ngobrol sama Syra, lihat hitungan kebersamaan, atau buka momen sederhana kalian pelan-pelan yaa.',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: AppColors.mutedText,
                           height: 1.5,
@@ -118,7 +126,7 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'Pilih yang kamu butuhin dulu, sisanya tetap ada di sini buat dibuka kapan aja.',
+              'Pilih yang kamu butuhin dulu yaa, sisanya tetap ada di sini buat dibuka kapan aja.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: AppColors.mutedText,
                     height: 1.45,
@@ -128,7 +136,7 @@ class HomePage extends StatelessWidget {
             MenuCard(
               icon: Icons.chat_bubble_outline_rounded,
               title: 'Chat dengan Syra',
-              subtitle: 'Tempat ngobrol hangat saat kamu pengen ditemenin.',
+              subtitle: 'Tempat ngobrol hangat saat kamu pengen ditemenin yaa.',
               onTap: () {
                 Navigator.of(context).pushNamed(ChatPage.routeName);
               },
@@ -140,7 +148,7 @@ class HomePage extends StatelessWidget {
                   child: _MiniHomeCard(
                     icon: Icons.favorite_border_rounded,
                     title: 'Love Counter',
-                    subtitle: 'Hitungan kebersamaan',
+                    subtitle: 'Hitungan kebersamaan yaa',
                     onTap: () {
                       Navigator.of(context).pushNamed(
                         LoveCounterPage.routeName,
@@ -153,7 +161,7 @@ class HomePage extends StatelessWidget {
                   child: _MiniHomeCard(
                     icon: Icons.auto_stories_rounded,
                     title: 'Timeline',
-                    subtitle: 'Momen sederhana kalian',
+                    subtitle: 'Momen sederhana kalian yaa',
                     onTap: () {
                       Navigator.of(context).pushNamed(
                         TimelinePage.routeName,
