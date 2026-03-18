@@ -125,6 +125,12 @@ Pilihan paling realistis tanpa kartu untuk backend kecil ini adalah:
 - Frontend: Firebase Hosting
 - Backend: Vercel Functions
 
+Catatan penting:
+
+- Vercel di repo ini sekarang dikonfigurasi sebagai **backend-only**
+- Frontend Flutter Web jangan dideploy ke Vercel untuk jalur ini
+- Frontend tetap build lokal lalu deploy ke Firebase Hosting
+
 Endpoint Vercel yang sudah disiapkan:
 
 - [api/health.js](./api/health.js)
@@ -134,6 +140,9 @@ Endpoint Vercel yang sudah disiapkan:
 
 1. Push repo ke GitHub.
 2. Import repo ini ke Vercel.
+3. Saat import:
+   - preset pilih `Other`
+   - root directory biarkan kosong
 3. Di Vercel, tambahkan environment variable:
 
 ```env
