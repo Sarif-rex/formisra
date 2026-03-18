@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../app.dart';
 import '../core/theme/app_colors.dart';
 import '../models/chat_message.dart';
 import '../services/chat_api_service.dart';
@@ -285,69 +286,39 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return MobileShell(
-      appBar: AppBar(
-        title: const Text('Syra'),
-        actions: [
-          TextButton(
-            onPressed: _messages.length <= 1 || _isSending ? null : _clearChat,
-            child: const Text('Hapus chat'),
-          ),
-        ],
-      ),
-      bottomBar: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
-        child: SafeArea(
-          top: false,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _controller,
-                  minLines: 1,
-                  maxLines: 4,
-                  maxLength: 400,
-                  textCapitalization: TextCapitalization.sentences,
-                  textInputAction: TextInputAction.send,
-                  onSubmitted: (_) => _sendMessage(),
-                  decoration: const InputDecoration(
-                    hintText: 'Cerita ke Syra di sini...',
-                    counterText: '',
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              SizedBox(
-                width: 56,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: _isSending ? null : _sendMessage,
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  child: _isSending
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2.2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Icon(Icons.arrow_upward_rounded),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
         child: Column(
           children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Syra ${FormisraApp.buildMarker}',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w800,
+                            ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Tempat kecil buat ditemenin dengan tenang.',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: AppColors.mutedText,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: _messages.length <= 1 || _isSending ? null : _clearChat,
+                  child: const Text('Hapus chat'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
             if (_errorMessage != null) ...[
               AppCard(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -394,10 +365,56 @@ class _ChatPageState extends State<ChatPage> {
                         )
                       : ListView(
                           controller: _scrollController,
+                          padding: const EdgeInsets.only(top: 4, bottom: 8),
                           children: _messages
                               .map((message) => ChatBubble(message: message))
                               .toList(),
                         ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _controller,
+                    minLines: 1,
+                    maxLines: 4,
+                    maxLength: 400,
+                    textCapitalization: TextCapitalization.sentences,
+                    textInputAction: TextInputAction.send,
+                    onSubmitted: (_) => _sendMessage(),
+                    decoration: const InputDecoration(
+                      hintText: 'Cerita ke Syra di sini...',
+                      counterText: '',
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                SizedBox(
+                  width: 56,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: _isSending ? null : _sendMessage,
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: _isSending
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Icon(Icons.arrow_upward_rounded),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
