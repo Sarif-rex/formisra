@@ -150,9 +150,10 @@ async function generateOpenRouterReply({ message, history = [] }) {
   }
 
   const data = await response.json();
-  const reply = normalizeOpenRouterReply(data.choices?.[0]?.message?.content);
+  const reply = normalizeOpenRouterReply(data);
 
   if (!reply) {
+    console.error('OpenRouter empty reply payload:', JSON.stringify(data));
     throw new AiServiceError({
       message: 'Syra belum bisa membalas sekarang.',
       statusCode: 502,
@@ -249,7 +250,14 @@ function getOpenRouterSiteUrl() {
   return validCandidate ? validCandidate.trim() : '';
 }
 
-function normalizeOpenRouterReply(content) {
+function normalizeOpenRouterReply(payload) {
+  const content =
+    payload?.choices?.[0]?.message?.content ??
+    payload?.choices?.[0]?.content ??
+    payload?.choices?.[0]?.text ??
+    payload?.message?.content ??
+    '';
+
   if (typeof content === 'string') {
     return content.trim();
   }
@@ -259,7 +267,25 @@ function normalizeOpenRouterReply(content) {
   }
 
   return content
-    .map((item) => (item && typeof item.text === 'string' ? item.text : ''))
+    .map((item) => {
+      if (!item) {
+        return '';
+      }
+
+      if (typeof item === 'string') {
+        return item;
+      }
+
+      if (typeof item.text === 'string') {
+        return item.text;
+      }
+
+      if (typeof item.content === 'string') {
+        return item.content;
+      }
+
+      return '';
+    })
     .filter(Boolean)
     .join('')
     .trim();
