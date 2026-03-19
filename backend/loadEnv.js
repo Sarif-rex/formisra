@@ -9,13 +9,11 @@ function loadBackendEnv() {
   }
 
   const rootDir = path.resolve(__dirname);
-  const preferredEnvPath = path.join(rootDir, '.env.openai');
-  const fallbackEnvPath = path.join(rootDir, '.env');
-  const envPath = fs.existsSync(preferredEnvPath)
-    ? preferredEnvPath
-    : fallbackEnvPath;
+  const envCandidates = ['.env.openrouter', '.env.openai', '.env']
+    .map((fileName) => path.join(rootDir, fileName));
+  const envPath = envCandidates.find((candidate) => fs.existsSync(candidate));
 
-  if (fs.existsSync(envPath)) {
+  if (envPath && fs.existsSync(envPath)) {
     try {
       const dotenv = require('dotenv');
       dotenv.config({ path: envPath });

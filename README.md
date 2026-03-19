@@ -6,7 +6,7 @@ Web romantis mobile-first untuk Misra dengan AI Syra.
 
 - Frontend: Flutter Web
 - Backend: Node.js + Express
-- AI provider: Gemini API
+- AI provider: OpenRouter (default) / Gemini (fallback)
 - Deployment target:
   - Frontend -> Vercel
   - Backend -> Render
@@ -15,11 +15,14 @@ Web romantis mobile-first untuk Misra dengan AI Syra.
 
 ### Backend
 
-Buat file `backend/.env.openai` atau `backend/.env`:
+Buat file `backend/.env.openrouter` atau `backend/.env`:
 
 ```env
-GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-2.5-flash-lite
+AI_PROVIDER=openrouter
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENROUTER_MODEL=meta-llama/llama-3.1-8b-instruct:free
+OPENROUTER_APP_NAME=Formisra
+OPENROUTER_SITE_URL=http://localhost:3000
 PORT=3000
 CORS_ORIGIN=http://localhost:3000
 ```
@@ -52,14 +55,17 @@ Langkah:
 3. Pilih repo ini.
 4. Render akan membaca `render.yaml`.
 5. Isi environment variable berikut di service `formisra-backend`:
-   - `GEMINI_API_KEY`
+   - `AI_PROVIDER=openrouter`
+   - `OPENROUTER_API_KEY`
+   - `OPENROUTER_MODEL`
    - `CORS_ORIGIN`
 
 Set nilai production:
 
 ```env
-GEMINI_API_KEY=your_real_key
-GEMINI_MODEL=gemini-2.5-flash-lite
+AI_PROVIDER=openrouter
+OPENROUTER_API_KEY=your_real_key
+OPENROUTER_MODEL=meta-llama/llama-3.1-8b-instruct:free
 CORS_ORIGIN=https://formisra.com
 ```
 
@@ -116,7 +122,7 @@ CORS_ORIGIN=https://formisra.com
 - Jangan commit file env berisi key asli.
 - Frontend tidak boleh menyimpan API key provider.
 - Render free plan bisa cold start.
-- Kalau Gemini model berubah, cukup ganti `GEMINI_MODEL` di Render.
+- Kalau model OpenRouter berubah, cukup ganti `OPENROUTER_MODEL` di deployment.
 
 ## Deploy Gratis Tanpa Kartu
 
@@ -146,8 +152,9 @@ Endpoint Vercel yang sudah disiapkan:
 3. Di Vercel, tambahkan environment variable:
 
 ```env
-GEMINI_API_KEY=your_real_key
-GEMINI_MODEL=gemini-2.5-flash-lite
+AI_PROVIDER=openrouter
+OPENROUTER_API_KEY=your_real_key
+OPENROUTER_MODEL=meta-llama/llama-3.1-8b-instruct:free
 CORS_ORIGIN=https://misra-romantic-web.web.app
 ```
 
@@ -173,7 +180,7 @@ firebase deploy --only hosting
 
 ## Checklist Deploy Hemat
 
-- Pakai `gemini-2.5-flash-lite` sebagai model default.
+- Pakai model OpenRouter gratis yang ringan sebagai default backend.
 - Pastikan frontend hanya memanggil backend, tidak pernah provider AI langsung.
 - Set `CORS_ORIGIN` spesifik ke domain frontend production.
 - Batasi history chat yang dikirim ke backend agar token tetap kecil.
@@ -182,7 +189,7 @@ firebase deploy --only hosting
 - Deploy backend di platform yang bisa scale down saat idle.
 - Simpan API key hanya di environment deployment, bukan di repo.
 - Uji `GET /health` dan `POST /api/chat` setelah deploy.
-- Pantau usage Gemini beberapa hari pertama untuk lihat pola biaya/quota.
+- Pantau usage OpenRouter beberapa hari pertama untuk lihat pola quota.
 
 ## Deploy Firebase + Cloud Run
 
